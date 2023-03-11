@@ -27,7 +27,7 @@ def create_array(size = (2,2)):
 #set_one()
 
 # %%
-def set_one(arr : np.ndarray):
+def set_one(arr):
     np.fill_diagonal(arr, 1)
     return arr
 
@@ -39,7 +39,7 @@ def set_one(arr : np.ndarray):
 # do_transpose()
 
 # %%
-def do_transpose(arr : np.ndarray):
+def do_transpose(arr):
     return arr.transpose()
 
 # %%
@@ -49,8 +49,10 @@ def do_transpose(arr : np.ndarray):
 # round_array()
 
 # %%
-def round_array(arr : np.ndarray, r = 2):
-    return arr.round(2)
+def round_array(arr, r = 2):
+    x = arr.round(2)
+    return x
+print(round_array(np.array([0.1223, 0.1675])))
 
 # %%
 # Készíts egy olyan függvényt, ami a bementként kapott 0 és 1 ből álló tömben a 0 - False-ra, az 1 True-ra cserélni
@@ -60,7 +62,8 @@ def round_array(arr : np.ndarray, r = 2):
 
 # %%
 def bool_array(arr : np.ndarray):
-    return arr.astype(bool)
+    x = arr.astype(bool)
+    return x
 
 # %%
 
@@ -72,7 +75,7 @@ def bool_array(arr : np.ndarray):
 # invert_bool_array()
 
 # %%
-def rt_bool_array(arr : np.ndarray):
+def invert_bool_array(arr):
     x =arr.astype(bool)
     return np.invert(x)
 
@@ -84,7 +87,7 @@ def rt_bool_array(arr : np.ndarray):
 
 
 # %%
-def flatten(arr : np.ndarray):
+def flatten(arr):
     return arr.reshape(-1)
 
 

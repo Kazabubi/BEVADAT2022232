@@ -29,8 +29,11 @@ def column_swap(arr):
 
 # %%
 def compare_two_array(arr1, arr2):
-    x = np.where(arr1 == arr2)
-    return x[0]
+    x = arr1 == arr2
+    x = np.where(x == True)
+    x = np.concatenate(x)
+    x = np.reshape(x, (2, -1))
+    return x
 
 # %%
 # Készíts egy olyan függvényt, ami vissza adja string-ként a megadott array dimenzióit:
@@ -43,7 +46,7 @@ def compare_two_array(arr1, arr2):
 def get_array_shape(arr):
     x = np.shape(arr)
     if len(x) == 0:
-        return "sor: 0" + ", oszlop: 0" + ", melyseg: 0"
+        return "sor: 1" + ", oszlop: 1" + ", melyseg: 1"
     if len(x) == 1:
         return "sor: 1" + ", oszlop: " + str(x[2]) + ", melyseg: 1"
     if len(x) == 2:
