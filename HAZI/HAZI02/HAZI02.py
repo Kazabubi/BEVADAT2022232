@@ -32,7 +32,8 @@ def compare_two_array(arr1, arr2):
     x = arr1 == arr2
     x = np.where(x == True)
     x = np.concatenate(x)
-    x = np.reshape(x, (2, -1))
+    x = np.reshape(x, (len(np.shape(arr1)), -1))
+    x = np.transpose(x)
     return x
 
 # %%
@@ -48,7 +49,7 @@ def get_array_shape(arr):
     if len(x) == 0:
         return "sor: 1" + ", oszlop: 1" + ", melyseg: 1"
     if len(x) == 1:
-        return "sor: 1" + ", oszlop: " + str(x[2]) + ", melyseg: 1"
+        return "sor: 1" + ", oszlop: " + str(x[0]) + ", melyseg: 1"
     if len(x) == 2:
         return "sor: " + str(x[0]) + ", oszlop: " + str(x[1]) + ", melyseg: 1"
     if len(x) == 3:
