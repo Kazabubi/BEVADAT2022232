@@ -29,12 +29,8 @@ def column_swap(arr):
 
 # %%
 def compare_two_array(arr1, arr2):
-    x = arr1 == arr2
-    x = np.where(x == True)
-    x = np.concatenate(x)
-    x = np.reshape(x, (len(np.shape(arr1)), -1))
-    x = np.transpose(x)
-    return x
+    x = np.where(np.equal(arr1, arr2))
+    return x[0]
 
 # %%
 # Készíts egy olyan függvényt, ami vissza adja string-ként a megadott array dimenzióit:
@@ -65,8 +61,8 @@ def get_array_shape(arr):
 
 # %%
 def encode_Y(arr, clss):
-    y = np.arange(clss)
-    x = np.zeros((clss,clss))
+    y = np.arange(len(arr))
+    x = np.zeros((len(arr),clss))
     x[y, arr] = 1
     return x
 
