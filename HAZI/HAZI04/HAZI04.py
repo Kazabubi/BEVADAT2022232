@@ -20,6 +20,7 @@ függvény neve: csv_to_df
 '''
 
 # %%
+#done
 def csv_to_df(path : str):
     df = pd.read_csv(path)
     return df
@@ -38,6 +39,7 @@ függvény neve: capitalize_columns
 '''
 
 # %%
+#done
 def cp_condition(x : str):
     if not x.__contains__('e'):
         x = x.upper()
@@ -61,6 +63,7 @@ függvény neve: math_passed_count
 '''
 
 # %%
+#done
 def math_passed_count(df : pd.DataFrame):
     df_out = df.copy()
     x = np.where(df_out["math score"] > 49)
@@ -78,6 +81,7 @@ függvény neve: did_pre_course
 '''
 
 # %%
+#done
 def did_pre_course(df : pd.DataFrame):
     df_out = df.copy()
     x = df_out.loc[df_out["test preparation course"] == "completed"]
@@ -96,7 +100,7 @@ függvény neve: average_scores
 '''
 
 # %%
-
+#nope
 
 # %%
 '''
@@ -110,10 +114,11 @@ függvény neve: add_age
 '''
 
 # %%
+#revised
 def add_age(df : pd.DataFrame):
     df_out = df.copy()
     np.random.seed = 42
-    x = np.random.randint(low=18, high=67, size=np.shape(df_out)[0])
+    x = np.random.randint(low=18, high=66, size=np.shape(df_out)[0])
     df_out["age"] = x
     return df_out
 #add_age(df_data)
@@ -129,6 +134,7 @@ függvény neve: female_top_score
 '''
 
 # %%
+#done
 def female_top_score(df : pd.DataFrame):
     df_out = df.copy()
     x = df_out.loc[df_out["gender"] == "female"]
@@ -155,10 +161,11 @@ függvény neve: add_grade
 '''
 
 # %%
+#revised
 def add_grade(df : pd.DataFrame):
     df_out = df.copy()
     x = (df_out["math score"] + df_out["reading score"] + df_out["writing score"]) / 300
-    criteria =[x.between(0.9, 1),x.between(0.8, 0.89),x.between(0.7, 0.79),x.between(0.6, 0.69),x.between(0, 0.6)]
+    criteria =[x.between(0.9, 1),x.between(0.8, 0.9),x.between(0.7, 0.8),x.between(0.6, 0.7),x.between(0, 0.6)]
     values = ["A", "B", "C", "D", "F"]
     df_out["grade"] = np.select(criteria, values, 0)
     return df_out
@@ -180,12 +187,17 @@ függvény neve: math_bar_plot
 '''
 
 # %%
+#revised
 def math_bar_plot(df : pd.DataFrame):
     fig, ax = plt.subplots()
     ax.set_title("Avarage Math Score by Gender")
     ax.set_xlabel("Gender")
     ax.set_ylabel("Math Score")
-    ax.bar(df["gender"], np.average(df["math score"]))
+    z = df.groupby(["gender"])
+    x = z["gender"].count()
+    y = z["math score"].sum()
+    z = y/x
+    ax.bar(z.keys(), z)
     return fig
 #math_bar_plot(df_data)
 
@@ -205,11 +217,12 @@ függvény neve: writing_hist
 '''
 
 # %%
+#revised
 def writing_hist(df : pd.DataFrame):
     fig, ax = plt.subplots()
     ax.set_label("Distribution of Writing Scores")
     ax.set_xlabel("Writing Score")
-    ax.set_ylabel("Number of Student")
+    ax.set_ylabel("Number of Students")
     ax.hist(df["writing score"])
     return fig
 #writing_hist(df_data)
@@ -231,6 +244,7 @@ függvény neve: ethnicity_pie_chart
 '''
 
 # %%
+#done
 def ethnicity_pie_chart(df : pd.DataFrame):
     df_out = df.copy()
     fig, ax = plt.subplots()
