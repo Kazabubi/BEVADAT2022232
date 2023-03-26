@@ -2,6 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 # %%
 '''
@@ -100,7 +101,11 @@ függvény neve: average_scores
 '''
 
 # %%
-#nope
+#revised
+def average_scores(df : pd.DataFrame):
+    df_out = df.copy()
+    return df_out.groupby("parental level of education")[["math score", "reading score", "writing score"]].mean()
+#average_scores(df_data)
 
 # %%
 '''
@@ -117,9 +122,8 @@ függvény neve: add_age
 #revised
 def add_age(df : pd.DataFrame):
     df_out = df.copy()
-    np.random.seed = 42
-    x = np.random.randint(low=18, high=66, size=np.shape(df_out)[0])
-    df_out["age"] = x
+    random.seed(42)
+    df_out["age"] = [random.randint(18, 66) for _ in range(len(df))]
     return df_out
 #add_age(df_data)
 
@@ -161,7 +165,7 @@ függvény neve: add_grade
 '''
 
 # %%
-#revised
+#done
 def add_grade(df : pd.DataFrame):
     df_out = df.copy()
     x = (df_out["math score"] + df_out["reading score"] + df_out["writing score"]) / 300
@@ -193,11 +197,9 @@ def math_bar_plot(df : pd.DataFrame):
     ax.set_title("Avarage Math Score by Gender")
     ax.set_xlabel("Gender")
     ax.set_ylabel("Math Score")
-    z = df.groupby(["gender"])
-    x = z["gender"].count()
-    y = z["math score"].sum()
-    z = y/x
-    ax.bar(z.keys(), z)
+    x = df.groupby("gender")["math score"].mean()
+    print()
+    ax.bar(x.keys(), x)
     return fig
 #math_bar_plot(df_data)
 
@@ -217,7 +219,7 @@ függvény neve: writing_hist
 '''
 
 # %%
-#revised
+#done
 def writing_hist(df : pd.DataFrame):
     fig, ax = plt.subplots()
     ax.set_label("Distribution of Writing Scores")
