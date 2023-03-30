@@ -2,7 +2,7 @@ import numpy as np
 import seaborn as sns
 from typing import Tuple
 from scipy.stats import mode
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix as conf_mat
 
 
 csv_path = "iris.csv"
@@ -63,6 +63,6 @@ class KNNClassifier:
         return true_positive / len(self.y_test) * 100
     
 
-    def plot_confusion_matrix(self):
-        conf_matrix = confusion_matrix(self.y_test,self.y_preds)
+    def confusion_matrix(y_test:np.ndarray,y_preds:np.ndarray):
+        conf_matrix = conf_mat(y_test,y_preds)
         sns.heatmap(conf_matrix,annot=True) 
