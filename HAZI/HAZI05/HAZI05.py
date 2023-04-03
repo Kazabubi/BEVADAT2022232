@@ -9,9 +9,9 @@ csv_path = "diabetes.csv"
 
 class KNNClassifier:
 
-    def __init__(self, k:int, test_set_ratio : float) -> None:
+    def __init__(self, k:int, test_split_ratio : float) -> None:
         self.k =k
-        self.test_split_ratio = test_set_ratio
+        self.test_split_ratio = test_split_ratio
 
     @property
     def k_neighbors(self):

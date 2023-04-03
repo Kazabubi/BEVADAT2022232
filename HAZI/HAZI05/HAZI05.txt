@@ -1,0 +1,57 @@
+A workflow menete a következő: jupyter notebook-on fejlesztettem az egyes függvényeket és ezek után ezeket a függvényeket kimásoltam egy python fáljba.
+Itt egy KNNClassifier nevű class-ba rendeztem ezeket és átírtam, hogy ahol lehet az osztály változóit és függvényeit használj a self kulcsszóval.
+
+
+def __init__(self, k:int, test_split_ratio : float) -> None:
+    Az osztály konstruktora vár egy k értéket, ami megadja, hogy hány darab szomszéd alapján osztályozza az új adatokat.
+    A test_split_ratio pedig egy 0 és 1 közötti lebegőpontos szám, mai azt adja meg, hogy az adathalmaz hány százalékát használjuk tesztként, illetve a maradék százalékon tanul.
+
+
+    @property
+    def k_neighbors(self):
+        A k_neighbors property visszadja a konstruktorban megadott k értéket.
+    
+    
+    @staticmethod
+    def load_csv(csv_path:str) ->Tuple[pd.DataFrame,pd.DataFrame]:
+        A load_csv metódus egy string-ként megadott útvonalat vár el, ami alapján betölt csv fájlokat. Ezeket az adatokat DataFrame -ként értelmezi.
+        Az adatokat a DataFrame.sample(frac=1, random_state=42) metódus segítségével random összekeverem, a 42-es seed segítségével.
+        Ezek után szátválasztom 2 DataFrame-re az adatokat. Az utolsó oszlop tartalmazza klasszifikációkat, ez lesz y, azaz labels, a maradék adat pedig az x, azaz features.
+    
+    
+    def train_test_split(self, features:pd.DataFrame, labels:pd.DataFrame) -> None:
+        A train_test_split metódus a megadott x (features) és y (labels) értékeket horizontálisan elvágja a megadott test_split_ratio alapján.
+        A tesztelő halmazok lesznek x_test és y_test, a tanító halmazok pedig az x_train és y_train. 
+
+    
+    def euclidean(self, element_of_x:pd.DataFrame) -> pd.DataFrame:
+        Az euclidean(element_of_x) függvény visszad euklédeszi távolságokat egy x_test-ből nyert sor és x_train sorai között, DataFrame-ként.
+        Ezzel kapjuk meg a távolságokat a k szomszédhoz.
+    
+
+    def predict(self) -> None:
+        labels_pred = []
+        for x_test_element in self.x_test.iterrows():
+            distances = self.euclidean(pd.DataFrame(x_test_element[1]).transpose())
+            distances = pd.DataFrame(sorted(zip(distances,self.y_train)))
+            label_pred = mode(distances[1].head(self.k),keepdims=False).mode
+            labels_pred.append(label_pred)
+
+        self.y_preds = pd.Series(labels_pred, dtype = int)
+        A predict() metódus végigiterál x_test sorain, mindegyik sorhoz távolságokat számol, amihez melléfűzi az y_train oszlopot,
+        így generálva egy rostélyt tulajdonképpen, hogy milyen távolsághoz milyen klasszifikáció tartozik.
+        Ezeket távolságok szerint növekvő sorrendbe rendez, kiválasztja a k értéknek megfelelően a legközelebbieket és ezek label-jeinek móduszát hozzáfűzi egy listához.
+        Ezzel megkapjuk a y_preds -et, azaz az x_test értékeihez tartozó label-eket.
+
+    
+    def accuracy(self) -> float:
+        Az accuracy() függvény egymás mellé fűzi 2 oszlopba y_test és y_preds sorait, soronként megvizsgálja, hogy egyenlőek-e, majd megszámolja az egyenlő értékeket.
+        Ha ezt a számot leosztjuk y_test hosszával és megszorozzuk százzal, megkapjuk százalékosan, hogy az előrejelzett label-ek mennyire pontosak a valósághoz képest.
+    
+
+    def confusion_matrix(self) -> np.ndarray:
+        A confusion_matrix() függvény visszadja a tényleges és előrejelzett értékek konfúziós mátrixát az sklearn.metrics confusion_matrix könyvtára segítségével. 
+
+    def best_k(self) -> Tuple[int,float]:
+        A best_k() függvény 1-től 20-ig végigiterál lehetséges k értékeken, mindegyikkel készít egy előrejelzést és megvizsgálja ezek pontosságát.
+        A legnagyobb pontosságú k értéket és a hozzátartozó pontosságot visszadja egy Tuple -ként.
