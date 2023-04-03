@@ -63,6 +63,6 @@ class KNNClassifier:
         return true_positive / len(self.y_test) * 100
     
 
-    def confusion_matrix(y_test:np.ndarray,y_preds:np.ndarray):
+    def confusion_matrix(y_test:np.ndarray,y_preds:np.ndarray) -> np.ndarray:
         conf_matrix = conf_mat(y_test,y_preds)
-        sns.heatmap(conf_matrix,annot=True) 
+        return conf_mat
