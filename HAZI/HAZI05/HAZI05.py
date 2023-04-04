@@ -21,12 +21,12 @@ class KNNClassifier:
     @staticmethod
     def load_csv(csv_path:str) ->Tuple[pd.DataFrame,pd.DataFrame]:
         dataset = pd.read_csv(filepath_or_buffer=csv_path, sep=',')
-        dataset = dataset.sample(frac=1, random_state=42)
-        x,y = dataset.iloc[:,:7],dataset.iloc[:,-1]
+        dataset = dataset.sample(frac=1, random_state=42).reset_index(drop=True)
+        x,y = dataset.iloc[:,:-1],dataset.iloc[:,-1]
         return x,y
     
     
-    def train_test_split(self, features:pd.DataFrame,
+    def train_test_split(self, features:pd.core.frame.DataFrame,
                      labels:pd.DataFrame) -> None:
         
         test_size = int(len(features) * self.test_split_ratio)
