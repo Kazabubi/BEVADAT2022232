@@ -65,4 +65,4 @@ class KNNClassifier:
 
     def confusion_matrix(y_test:np.ndarray,y_preds:np.ndarray) -> np.ndarray:
         conf_matrix = conf_mat(y_test,y_preds)
-        return conf_mat
+        return conf_matrix
