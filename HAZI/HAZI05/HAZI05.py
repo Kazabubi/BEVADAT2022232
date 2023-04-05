@@ -20,7 +20,7 @@ class KNNClassifier:
     
     @staticmethod
     def load_csv(csv_path:str) ->Tuple[pd.DataFrame,pd.DataFrame]:
-        dataset = pd.read_csv(filepath_or_buffer=csv_path, sep=',')
+        dataset = pd.read_csv(filepath_or_buffer=csv_path)
         dataset = dataset.sample(frac=1, random_state=42).reset_index(drop=True)
         x,y = dataset.iloc[:,:-1],dataset.iloc[:,-1]
         return x,y
@@ -43,13 +43,13 @@ class KNNClassifier:
 
     
     def euclidean(self, element_of_x:pd.DataFrame) -> pd.DataFrame:
-        return (((self.x_train.loc[:,] - element_of_x.iloc[0])**2).sum(axis=1))**(1/2)
+        return (((self.x_train.loc[:,] - element_of_x)**2).sum(axis=1))**(1/2)
     
 
     def predict(self) -> None:
         labels_pred = []
         for x_test_element in self.x_test.iterrows():
-            distances = self.euclidean(pd.DataFrame(x_test_element[1]).transpose())
+            distances = self.euclidean((pd.DataFrame(x_test_element[1]).transpose()).iloc[0])
             distances = pd.DataFrame(sorted(zip(distances,self.y_train)))
             label_pred = mode(distances[1].head(self.k),keepdims=False).mode
             labels_pred.append(label_pred)
@@ -65,14 +65,29 @@ class KNNClassifier:
 
     def confusion_matrix(self) -> np.ndarray:
         conf_matrix = conf_mat(self.y_test,self.y_preds)
-        return conf_mat
+        return conf_matrix
 
     def best_k(self) -> Tuple[int,float]:
         acc = 0
         r = 0
-        for k in range(1,21):
-            tmp = self.accuracy(y_test=self.y_test, y_preds=self.predict(self.x_train, self.y_train, self.x_test, k)) 
+        k_store = self.k
+        for i in range(1,21):
+            self.k = i
+            self.predict()
+            tmp = self.accuracy() 
             if(tmp> acc):
-                r = k
+                r = i
                 acc = tmp
+        self.k = k_store
         return (r, acc)
+
+
+#knn = KNNClassifier(5, 0.2)
+
+#x,y = KNNClassifier.load_csv("C:/Users/venus/Desktop/TZ5MYT_BEVADAT2022232/HAZI/HAZI05/diabetes.csv")
+
+#knn.train_test_split(x,y)
+#knn.predict()
+#print(knn.accuracy())
+
+#print(knn.best_k())
