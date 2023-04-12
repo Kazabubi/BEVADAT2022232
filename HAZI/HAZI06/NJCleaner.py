@@ -63,13 +63,13 @@ class NJCleaner:
         return self.data
     
     #2.9
-    def save_first_60k(self, csv_path : str) -> None:
+    def save_first_60k(self, path : str) -> None:
         wr = self.data.iloc[:60000,:]
-        wr.to_csv(path_or_buf=csv_path)
+        wr.to_csv(path_or_buf=path)
         pass
 
     #2.10
-    def prep_df(self, csv_path = 'data/NJ.csv') -> None:
+    def prep_df(self, path = 'data/NJ.csv') -> None:
 
         self.order_by_scheduled_time()
 
@@ -83,11 +83,11 @@ class NJCleaner:
 
         self.drop_unnecessary_columns()
 
-        self.save_first_60k(csv_path)
+        self.save_first_60k(path)
 
         pass
     
 
-njc = NJCleaner("C:/Users/venus/Desktop/TZ5MYT_BEVADAT2022232/HAZI/HAZI06/NJ Transit + Amtrak.csv")
+#njc = NJCleaner("C:/Users/venus/Desktop/TZ5MYT_BEVADAT2022232/HAZI/HAZI06/NJ Transit + Amtrak.csv")
 
-njc.prep_df("C:/Users/venus/Desktop/TZ5MYT_BEVADAT2022232/HAZI/HAZI06/res.csv")
+#njc.prep_df("C:/Users/venus/Desktop/TZ5MYT_BEVADAT2022232/HAZI/HAZI06/res.csv")
