@@ -58,6 +58,7 @@ class NJCleaner:
         da = df["delay_minutes"]
         de[da>5] = 1
         df["delay"] = de
+        df["delay"] = df["delay"].astype("int")
         return df
     
     #2.8
@@ -71,7 +72,7 @@ class NJCleaner:
     #2.9
     def save_first_60k(self, path : str) -> None:
         wr = self.data.iloc[:60000,:]
-        wr.to_csv(path_or_buf=path)
+        wr.to_csv(path_or_buf=path, index=False)
         pass
 
     #2.10
