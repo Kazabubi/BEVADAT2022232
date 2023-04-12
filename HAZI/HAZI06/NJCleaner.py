@@ -10,57 +10,63 @@ class NJCleaner:
 
     #2.3
     def order_by_scheduled_time(self) -> pd.DataFrame:
-        self.data.sort_values(by="scheduled_time", inplace=True)
-        return self.data
+        df = self.data.sort_values(by="scheduled_time")
+        return df
     
     #2.4
     def drop_columns_and_nan(self) -> pd.DataFrame:
-        self.data.drop(["from", "to"], axis=1, inplace=True)
-        self.data.dropna(axis=0, inplace=True)
-        return self.data
+        df = self.data.copy()
+        df.drop(["from", "to"], axis=1, inplace=True)
+        df.dropna(axis=0, inplace=True)
+        return df
     
     #2.5
     def convert_date_to_day(self):
-        self.data["day"] = pd.to_datetime(self.data["date"])
-        self.data["day"] = self.data["day"].dt.day_name()
-        self.data.drop(["date"], axis=1, inplace=True)
-        return self.data
+        df = self.data.copy()
+        df["day"] = pd.to_datetime(df["date"])
+        df["day"] = df["day"].dt.day_name()
+        df.drop(["date"], axis=1, inplace=True)
+        return df
     
     #2.6
     def convert_scheduled_time_to_part_of_the_day(self):
-        self.data["scheduled_time"] = pd.to_datetime(self.data["scheduled_time"], format='%Y-%m-%d %H:%M:%S')
+        df = self.data.copy()
 
-        ihelp = self.data.set_index("scheduled_time", drop=False)
+        df["scheduled_time"] = pd.to_datetime(df["scheduled_time"], format='%Y-%m-%d %H:%M:%S')
 
-        condition = [self.data["scheduled_time"].isin(ihelp.between_time('04:00','07:59').index),
-                     self.data["scheduled_time"].isin(ihelp.between_time('08:00','11:59').index),
-                     self.data["scheduled_time"].isin(ihelp.between_time('12:00','15:59').index),
-                     self.data["scheduled_time"].isin(ihelp.between_time('16:00','19:59').index),
-                     self.data["scheduled_time"].isin(ihelp.between_time('20:00','23:59').index),
-                     self.data["scheduled_time"].isin(ihelp.between_time('00:00','03:59').index)]
+        ihelp = df.set_index("scheduled_time", drop=False)
+
+        condition = [df["scheduled_time"].isin(ihelp.between_time('04:00','07:59').index),
+                     df["scheduled_time"].isin(ihelp.between_time('08:00','11:59').index),
+                     df["scheduled_time"].isin(ihelp.between_time('12:00','15:59').index),
+                     df["scheduled_time"].isin(ihelp.between_time('16:00','19:59').index),
+                     df["scheduled_time"].isin(ihelp.between_time('20:00','23:59').index),
+                     df["scheduled_time"].isin(ihelp.between_time('00:00','03:59').index)]
         
         labels = ["early_morning", "morning","afternoon","evening","night","late_night"]
 
-        self.data["part_of_the_day"] = np.select(condition, labels)
+        df["part_of_the_day"] = np.select(condition, labels)
 
-        self.data.drop(["scheduled_time"], axis=1, inplace=True)
+        df.drop(["scheduled_time"], axis=1, inplace=True)
 
-        return self.data
+        return df
     
     #2.7
     def convert_delay(self):
-        de = np.zeros((self.data.shape[0],1))
-        da = self.data["delay_minutes"]
+        df = self.data.copy()
+        de = np.zeros((df.shape[0],1))
+        da = df["delay_minutes"]
         de[da>5] = 1
-        self.data["delay"] = de
-        return self.data
+        df["delay"] = de
+        return df
     
     #2.8
     def drop_unnecessary_columns(self):
-        self.data.drop(["delay_minutes"], axis=1, inplace=True)
-        self.data.drop(["actual_time"], axis=1, inplace=True)
-        self.data.drop(["train_id"], axis=1, inplace=True)
-        return self.data
+        df = self.data.copy()
+        df.drop(["delay_minutes"], axis=1, inplace=True)
+        df.drop(["actual_time"], axis=1, inplace=True)
+        df.drop(["train_id"], axis=1, inplace=True)
+        return df
     
     #2.9
     def save_first_60k(self, path : str) -> None:
@@ -71,17 +77,17 @@ class NJCleaner:
     #2.10
     def prep_df(self, path = 'data/NJ.csv') -> None:
 
-        self.order_by_scheduled_time()
+        self.data = self.order_by_scheduled_time()
 
-        self.drop_columns_and_nan()
+        self.data = self.drop_columns_and_nan()
 
-        self.convert_date_to_day()
+        self.data = self.convert_date_to_day()
 
-        self.convert_scheduled_time_to_part_of_the_day()
+        self.data = self.convert_scheduled_time_to_part_of_the_day()
 
-        self.convert_delay()
+        self.data = self.convert_delay()
 
-        self.drop_unnecessary_columns()
+        self.data = self.drop_unnecessary_columns()
 
         self.save_first_60k(path)
 
