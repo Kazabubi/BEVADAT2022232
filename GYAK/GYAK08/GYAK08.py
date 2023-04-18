@@ -46,7 +46,7 @@ class LinearRegression:
     def evaluate(self, X, y):
         self.mse = np.mean((X - y)**2)
 
-
+"""
 LR = LinearRegression(2000,0.001)
 LR.fit(LR.X_train, LR.y_train)
 LR.predict(LR.X_test)
@@ -54,3 +54,4 @@ LR.plotLR(LR.X_test, LR.y_test).show()
 LR.evaluate(LR.y_pred, LR.y_test)
 print(LR.mse)
 input()
+"""
