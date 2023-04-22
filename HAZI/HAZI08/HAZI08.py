@@ -106,8 +106,8 @@ függvény neve: train_linear_regression
 
 # %%
 def train_linear_regression(X_train, y_train):
-    l = LinearRegression().fit(X_train,y_train)
-    return l
+    model = LinearRegression().fit(X_train,y_train)
+    return model
 
 #print(type(train_linear_regression(X_train, y_train)))
 
@@ -122,7 +122,9 @@ függvény neve: train_logistic_regression
 '''
 
 # %%
-
+def train_logistic_regression(X_train, y_train):
+    model = LogisticRegression().fit(X_train, y_train)
+    return model
 
 # %%
 ''' 
@@ -135,7 +137,9 @@ függvény neve: predict
 '''
 
 # %%
-
+def predict(model, X_test):
+    arr = model.predict(X_test)
+    return arr
 
 # %%
 '''
@@ -153,7 +157,13 @@ függvény neve: plot_actual_vs_predicted
 '''
 
 # %%
-
+def plot_actual_vs_predicted(y_test, y_pred):
+    fig, ax = plt.subplots()
+    ax = plt.scatter(y_test, y_pred)
+    ax.set_xlabel("Actual")
+    ax.set_ylabel("Predicted")
+    ax.set_title("Actual vs Predicted Target Values")
+    return fig
 
 # %%
 ''' 
@@ -166,6 +176,8 @@ függvény neve: evaluate_model
 '''
 
 # %%
-
+def evaluate_model(y_test, y_pred):
+    mse = mean_squared_error(y_test, y_pred)
+    return mse
 
 
