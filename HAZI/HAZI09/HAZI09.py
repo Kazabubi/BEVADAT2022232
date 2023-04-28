@@ -29,17 +29,6 @@ class KMeansOnDigits():
             results[mask] = m.mode
         self.labels = results
 
-        
-        result_array = np.ndarray(shape = len(self.clusters))
-        amount_of_clusters = len(np.unique(self.clusters))
-        for cluster in range(amount_of_clusters):
-            mask = self.clusters == cluster
-            label = np.bincount(self.digits.target[mask]).argmax()
-            result_array[mask] = label
-        self.labels2 = result_array
-        
-        
-
     def calc_accuracy(self):
         self.accuracy = accuracy_score(y_pred=self.labels, y_true=self.digits.target)
 
