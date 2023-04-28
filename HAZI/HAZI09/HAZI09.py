@@ -21,16 +21,37 @@ class KMeansOnDigits():
         self.clusters = out
 
     def get_labels(self):
-        labels = np.array(self.clusters.shape)
-        for i in range(0,10):
+        results = np.zeros((self.clusters.shape))
+        for i in range(0,self.n_clusters):
             mask = self.clusters == i
             sub = self.digits.target[mask]
             m = mode(sub)
-            labels[mask] = m
-        self.labels = labels
+            results[mask] = m.mode
+        self.labels = results
+
+        
+        result_array = np.ndarray(shape = len(self.clusters))
+        amount_of_clusters = len(np.unique(self.clusters))
+        for cluster in range(amount_of_clusters):
+            mask = self.clusters == cluster
+            label = np.bincount(self.digits.target[mask]).argmax()
+            result_array[mask] = label
+        self.labels2 = result_array
+        
+        
 
     def calc_accuracy(self):
-        accuracy_score(y_pred=self.labels, y_true=self.digits.target)
+        self.accuracy = accuracy_score(y_pred=self.labels, y_true=self.digits.target)
 
     def confusion_matrix(self):
-        self.mat = confusion_matrix(y_pred=self.labels, y_true=self.digits)
+        self.mat = confusion_matrix(y_pred=self.labels, y_true=self.digits.target)
+
+
+"""
+km = KMeansOnDigits(n_clusters=10,random_state=0)
+km.load_dataset()
+km.predict()
+km.get_labels()
+km.calc_accuracy()
+km.confusion_matrix()
+"""
